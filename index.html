@@ -43,8 +43,8 @@ button{border:none;background:none;cursor:pointer}
 .round-btn .cnt{position:absolute;top:-2px;right:-2px;background:var(--red);color:#fff;font-size:10px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px;border:2px solid var(--bg)}
 
 /* ---------- content ---------- */
-.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 12px calc(118px + env(safe-area-inset-bottom,0px))}
-.panel{display:none}.panel.active{display:block;animation:fade .18s ease}
+.scroll{position:relative;overscroll-behavior-y:contain;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 12px calc(118px + env(safe-area-inset-bottom,0px))}
+.panel{display:none}.panel.active{display:block}
 @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 .page-title{font-size:26px;font-weight:700;letter-spacing:-.02em;padding:6px 4px 12px}
 .page-title-row{display:flex;align-items:center;justify-content:space-between;padding-right:2px}
@@ -116,7 +116,7 @@ button{border:none;background:none;cursor:pointer}
 .btn-sm{width:auto;padding:8px 13px;font-size:13.5px;border-radius:10px}
 .btn[disabled]{opacity:.45;pointer-events:none}
 .fab{position:absolute;right:16px;bottom:calc(104px + env(safe-area-inset-bottom,0px));width:54px;height:54px;border-radius:18px;background:var(--dark);color:#fff;display:none;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.28);z-index:20}
-.fab.show{display:flex}
+.fab.show{display:flex;animation:pop .5s cubic-bezier(.34,1.56,.64,1)}
 
 /* forms */
 .field{margin-bottom:14px}
@@ -133,31 +133,46 @@ button{border:none;background:none;cursor:pointer}
 .toggle-row b{font-size:14.5px;font-weight:600;display:block}
 .toggle-row span{font-size:12.5px;color:var(--t2)}
 .switch{width:51px;height:31px;border-radius:16px;background:#d1d1d6;position:relative;flex:none;transition:background .2s}
-.switch::after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.25);transition:transform .2s}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.25);transition:transform .35s cubic-bezier(.34,1.56,.64,1),width .2s}
 .switch.on{background:#34c759}.switch.on::after{transform:translateX(20px)}
 .seg{display:flex;background:#e9e9e9;border-radius:10px;padding:2px;margin-bottom:12px}
 .seg button{flex:1;padding:7px 4px;border-radius:8px;font-size:13px;font-weight:600;color:var(--t2)}
 .seg button.on{background:#fff;color:var(--t1);box-shadow:0 1px 3px rgba(0,0,0,.15)}
 
-/* floating tab bar (iOS style) */
-.tabbar{position:absolute;left:0;right:0;bottom:0;z-index:30;display:flex;align-items:center;gap:10px;padding:18px 14px calc(env(safe-area-inset-bottom,0px) + 8px);pointer-events:none;background:linear-gradient(to top,rgba(241,241,241,.96) 38%,rgba(241,241,241,0))}
-.tb-circle,.tb-pill{pointer-events:auto;background:rgba(255,255,255,.94);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);box-shadow:0 2px 14px rgba(0,0,0,.13),0 0 0 .5px rgba(0,0,0,.06)}
-.tb-circle{width:58px;height:58px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;color:#7a7a7a}
+/* liquid glass tab bar */
+.tabbar{position:absolute;left:0;right:0;bottom:0;z-index:30;display:flex;align-items:center;gap:10px;padding:14px 14px calc(env(safe-area-inset-bottom,0px) + 8px);pointer-events:none;background:none}
+.tb-circle,.tb-pill{pointer-events:auto;position:relative;
+  background:radial-gradient(130% 150% at 12% -10%,rgba(255,255,255,.85),rgba(255,255,255,0) 52%),linear-gradient(180deg,rgba(255,255,255,.34),rgba(255,255,255,.14));
+  backdrop-filter:blur(20px) saturate(210%) brightness(1.05);-webkit-backdrop-filter:blur(20px) saturate(210%) brightness(1.05);
+  box-shadow:inset 0 1.5px 1px rgba(255,255,255,.95),inset 0 -1.5px 1px rgba(255,255,255,.4),inset 0 0 22px rgba(255,255,255,.28),0 10px 30px rgba(0,0,0,.16),0 2px 6px rgba(0,0,0,.08),0 0 0 .5px rgba(0,0,0,.09);
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
+.tb-circle{width:58px;height:58px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;color:#6e6e73}
 .tb-circle svg{width:26px;height:26px}
-.tb-circle:active,.tb-item:active{transform:scale(.94)}
-.tb-pill{flex:1;height:62px;border-radius:31px;display:flex;align-items:center;justify-content:space-around;padding:0 5px}
-.tb-item{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#8a8a8a;position:relative;transition:background .2s}
-.tb-item svg{width:27px;height:27px}
-.tb-item.active{background:#ececec;color:#1a1a1a}
-.tb-item .fillable .f{fill:none}
+.tb-circle:active{transform:scale(.9)}
+.tb-pill{flex:1;height:62px;border-radius:31px;display:flex;align-items:center;justify-content:space-around;padding:0 5px;touch-action:none;user-select:none;-webkit-user-select:none}
+.tb-pill.pressed{transform:scale(1.03)}
+.tb-lens{position:absolute;left:0;top:4px;width:54px;height:54px;border-radius:50%;z-index:0;pointer-events:none;
+  background:radial-gradient(90% 90% at 30% 15%,rgba(255,255,255,.95),rgba(255,255,255,.4)),rgba(255,255,255,.3);
+  box-shadow:inset 0 1.5px 1px #fff,inset 0 -3px 8px rgba(0,0,0,.07),0 3px 12px rgba(0,0,0,.14),0 0 0 .5px rgba(0,0,0,.06);
+  transition:transform .55s cubic-bezier(.34,1.35,.5,1),scale .3s cubic-bezier(.34,1.56,.64,1)}
+.tb-lens.noanim{transition:none}
+.tb-lens.stretch{animation:stretch .55s cubic-bezier(.34,1.35,.5,1)}
+.tb-pill.pressed .tb-lens{scale:1.16}
+@keyframes stretch{0%{scale:1 1}35%{scale:1.32 .9}100%{scale:1 1}}
+.tb-item{position:relative;z-index:1;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#7a7a80;transition:color .25s}
+.tb-item svg{width:27px;height:27px;transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
+.tb-item.active{color:#111}
+.tb-item.active svg{transform:scale(1.06)}
+.tb-item .fillable .f{fill:none;transition:fill .25s}
 .tb-item.active .fillable .f{fill:currentColor}
-.tb-item .dotc{position:absolute;top:8px;right:8px;width:9px;height:9px;border-radius:50%;background:var(--red);border:2px solid #fff}
-.tb-av{width:36px;height:36px;border-radius:50%;background:var(--green);color:#fff;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center}
+.tb-item.ping svg{animation:ping .8s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ping{0%{transform:scale(1) rotate(0)}25%{transform:scale(1.3) rotate(-14deg)}55%{transform:scale(1.2) rotate(10deg)}100%{transform:scale(1) rotate(0)}}
+.tb-av{width:36px;height:36px;border-radius:50%;background:var(--green);color:#fff;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 1px 1px rgba(255,255,255,.4)}
 .tb-circle.hasav{padding:0}
 /* sheets */
 .overlay{position:absolute;inset:0;background:rgba(0,0,0,.4);z-index:50;opacity:0;pointer-events:none;transition:opacity .25s}
 .overlay.show{opacity:1;pointer-events:auto}
-.sheet{position:absolute;left:0;right:0;bottom:0;z-index:51;background:var(--bg);border-radius:18px 18px 0 0;max-height:92%;display:flex;flex-direction:column;transform:translateY(104%);transition:transform .32s cubic-bezier(.32,.72,0,1)}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:51;background:var(--bg);border-radius:18px 18px 0 0;max-height:92%;display:flex;flex-direction:column;transform:translateY(104%);transition:transform .5s cubic-bezier(.32,.72,0,1)}
 .sheet.show{transform:none}
 .sheet-top{flex:none;padding:8px 16px 4px;text-align:center}
 .grab{width:36px;height:5px;border-radius:3px;background:#c7c7cc;margin:0 auto 8px}
@@ -226,6 +241,29 @@ button{border:none;background:none;cursor:pointer}
 .push-preview{background:#d9dce1;border-radius:16px;padding:14px;margin-bottom:12px}
 .push-preview .banner{position:relative;transform:none;left:0;right:0;top:0;cursor:default}
 .push-label{font-size:11.5px;font-weight:650;color:#4a4f57;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
+
+/* animations */
+.panel.anim>*{animation:rise .6s cubic-bezier(.2,.85,.25,1) both}
+.panel.anim>*:nth-child(2){animation-delay:.05s}.panel.anim>*:nth-child(3){animation-delay:.1s}.panel.anim>*:nth-child(4){animation-delay:.15s}.panel.anim>*:nth-child(5){animation-delay:.2s}.panel.anim>*:nth-child(6){animation-delay:.25s}.panel.anim>*:nth-child(7){animation-delay:.3s}.panel.anim>*:nth-child(n+8){animation-delay:.35s}
+@keyframes rise{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes pop{from{transform:scale(.3);opacity:0}to{transform:none;opacity:1}}
+@keyframes wipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.chart.wipe{animation:wipe 1.1s cubic-bezier(.3,.7,.2,1) .2s both}
+.btn{transition:transform .18s cubic-bezier(.34,1.56,.64,1),background .2s}.btn:active{transform:scale(.97)}
+.chip{transition:background .2s,color .2s,transform .2s}.chip:active{transform:scale(.94)}
+.overlay.show{backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.row,.menu-row,.step{transition:background .15s}
+.badge{animation:fade .4s ease both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+/* pull to refresh */
+.ptr{position:absolute;left:0;right:0;top:0;height:58px;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;color:#8a8a8e}
+.ptr svg{width:28px;height:28px}
+.ptr line{stroke:currentColor;stroke-width:2.4;stroke-linecap:round;opacity:.18;transition:opacity .12s}
+.ptr.spin svg{animation:ptrspin .9s steps(12) infinite}
+@keyframes ptrspin{to{transform:rotate(360deg)}}
+.scroll.pulling .panel{transform:translateY(var(--pull,0px))}
+.scroll.releasing .panel{transition:transform .5s cubic-bezier(.2,.9,.25,1.05)}
+.scroll.releasing .ptr{transition:opacity .3s}
 </style>
 </head>
 <body>
@@ -247,6 +285,7 @@ button{border:none;background:none;cursor:pointer}
   </div>
 
   <div class="scroll" id="scroll">
+    <div class="ptr" id="ptr"><svg viewBox="0 0 28 28"><line x1="14" y1="3" x2="14" y2="8" transform="rotate(0 14 14)"/><line x1="14" y1="3" x2="14" y2="8" transform="rotate(30 14 14)"/><line x1="14" y1="3" x2="14" y2="8" transform="rotate(60 14 14)"/><line x1="14" y1="3" x2="14" y2="8" transform="rotate(90 14 14)"/><line x1="14" y1="3" x2="14" y2="8" transform="rotate(120 14 14)"/><line x1="14" y1="3" x2="14" y2="8" transform="rotate(150 14 14)"/><line x1="14" y1="3" x2="14" y2="8" transform="rotate(180 14 14)"/><line x1="14" y1="3" x2="14" y2="8" transform="rotate(210 14 14)"/><line x1="14" y1="3" x2="14" y2="8" transform="rotate(240 14 14)"/><line x1="14" y1="3" x2="14" y2="8" transform="rotate(270 14 14)"/><line x1="14" y1="3" x2="14" y2="8" transform="rotate(300 14 14)"/><line x1="14" y1="3" x2="14" y2="8" transform="rotate(330 14 14)"/></svg></div>
     <div class="panel active" id="tab-home"></div>
     <div class="panel" id="tab-orders"></div>
     <div class="panel" id="tab-products"></div>
@@ -315,7 +354,7 @@ const I={
 let S=load();
 let V={tab:"home",menu:null,range:7,pf:"all",pq:"",of:"all",oq:"",editingId:null,emoji:EMOJIS[0]};
 let auto={timer:null};
-function blank(){return{onboarded:false,settings:{shopName:"",ownerName:"",email:"",industry:"",country:"DE",currency:"EUR",domain:""},products:[],orders:[],discounts:[],notifications:[],orderSeq:1000,visitors:0,setup:{theme:false,pay:false,domain:false},admin:{sound:true,banner:true,paid:true,customer:"",mode:"random",productId:"",qty:1,count:1,customName:"",customPrice:"",autoMin:6,autoMax:14}}}
+function blank(){return{onboarded:false,settings:{shopName:"",ownerName:"",email:"",industry:"",country:"DE",currency:"EUR",domain:""},products:[],orders:[],discounts:[],notifications:[],orderSeq:1000,visitors:0,setup:{theme:false,pay:false,domain:false},admin:{ntfy:false,topic:"",sound:true,banner:true,paid:true,customer:"",mode:"random",productId:"",qty:1,count:1,customName:"",customPrice:"",autoMin:6,autoMax:14}}}
 function load(){try{const r=localStorage.getItem(KEY);if(r){const p=JSON.parse(r);return Object.assign(blank(),p,{admin:Object.assign(blank().admin,p.admin||{})})}}catch(e){}return blank()}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 
@@ -347,6 +386,14 @@ function sysNotify(title,msg,orderId){
     if(swReg&&swReg.showNotification){swReg.showNotification(title,opts);return true}
     new Notification(title,opts);return true;
   }catch(e){return false}
+}
+
+/* ---------- real push to phone via ntfy.sh ---------- */
+function ntfyTopic(){if(!S.admin.topic){S.admin.topic="ecp-"+Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,8);save()}return S.admin.topic}
+function ntfySend(title,msg){
+  try{
+    return fetch("https://ntfy.sh/",{method:"POST",body:JSON.stringify({topic:ntfyTopic(),title:title,message:msg,tags:["moneybag"],priority:4})}).then(r=>r.ok).catch(()=>false);
+  }catch(e){return Promise.resolve(false)}
 }
 
 /* ---------- audio ---------- */
@@ -385,24 +432,56 @@ $("banner").addEventListener("click",()=>{
 });
 
 /* ---------- tabs ---------- */
+let tbBuilt=false;
+function lensTo(it,animate){
+  const lens=$("tbLens");if(!lens||!it)return;
+  if(!animate){lens.classList.add("noanim")}
+  lens.style.transform="translateX("+it.offsetLeft+"px)";
+  if(!animate){void lens.offsetWidth;lens.classList.remove("noanim")}
+}
+function moveLens(animate){const it=document.querySelector(".tb-item.active");lensTo(it,animate)}
 function buildTabbar(){
-  const un=S.notifications.filter(n=>!n.read).length;
   const items=[["home",I.home,"Start"],["orders",I.orders,"Bestellungen"],["products",I.products,"Produkte"],["menu",I.menu,"Menü"]];
   const act=V.tab==="customers"?"menu":V.tab;
   const ini=(S.settings.ownerName||S.settings.shopName||"A").charAt(0).toUpperCase();
-  $("tabbar").innerHTML=`<button class="tb-circle" id="tbSearch" aria-label="Suche">${I.search}</button>
-  <div class="tb-pill">${items.map(t=>`<button class="tb-item ${act===t[0]?"active":""}" data-tab="${t[0]}" aria-label="${t[2]}">${t[1]}${t[0]==="orders"&&S.orders.some(o=>!o.fulfilled&&o.paid)&&false?'<i class="dotc"></i>':""}</button>`).join("")}</div>
-  <button class="tb-circle hasav" id="tbProfile" aria-label="Profil"><span class="tb-av">${esc(ini)}</span></button>`;
-  $("tabbar").querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>{if(V.tab===b.dataset.tab&&b.dataset.tab==="menu"){V.menu=null}go(b.dataset.tab)}));
-  $("tbSearch").addEventListener("click",()=>{go("orders");setTimeout(()=>{const i=$("oq");if(i)i.focus()},60)});
-  $("tbProfile").addEventListener("click",()=>{V.menu="settings";go("menu");V.menu="settings";rMenu()});
+  let first=false;
+  if(!tbBuilt){
+    first=true;tbBuilt=true;
+    $("tabbar").innerHTML=`<button class="tb-circle" id="tbSearch" aria-label="Suche">${I.search}</button>
+    <div class="tb-pill" id="tbPill"><i class="tb-lens" id="tbLens"></i>${items.map(t=>`<button class="tb-item" data-tab="${t[0]}" aria-label="${t[2]}">${t[1]}</button>`).join("")}</div>
+    <button class="tb-circle hasav" id="tbProfile" aria-label="Profil"><span class="tb-av" id="tbAv"></span></button>`;
+    $("tbSearch").addEventListener("click",()=>{go("orders");setTimeout(()=>{const i=$("oq");if(i)i.focus()},60)});
+    $("tbProfile").addEventListener("click",()=>{V.menu="settings";go("menu");V.menu="settings";rMenu()});
+    const pill=$("tbPill");let drag=false;
+    const nearest=x=>{let best=null,bd=1e9;pill.querySelectorAll(".tb-item").forEach(it=>{const r=it.getBoundingClientRect();const d=Math.abs(x-(r.left+r.width/2));if(d<bd){bd=d;best=it}});return best};
+    pill.addEventListener("pointerdown",e=>{drag=true;try{pill.setPointerCapture(e.pointerId)}catch(_){}pill.classList.add("pressed");lensTo(nearest(e.clientX),true);try{navigator.vibrate&&navigator.vibrate(6)}catch(_){}});
+    pill.addEventListener("pointermove",e=>{if(!drag)return;lensTo(nearest(e.clientX),true)});
+    pill.addEventListener("pointerup",e=>{if(!drag)return;drag=false;pill.classList.remove("pressed");const it=nearest(e.clientX);if(!it)return;const t=it.dataset.tab;if(V.tab===t&&t==="menu")V.menu=null;go(t)});
+    pill.addEventListener("pointercancel",()=>{drag=false;pill.classList.remove("pressed");moveLens(true)});
+    window.addEventListener("resize",()=>moveLens(false));
+  }
+  $("tbAv").textContent=ini;
+  const prev=document.querySelector(".tb-item.active");
+  document.querySelectorAll(".tb-item").forEach(it=>it.classList.toggle("active",it.dataset.tab===act));
+  const cur=document.querySelector(".tb-item.active");
+  if(first){requestAnimationFrame(()=>moveLens(false))}
+  else{moveLens(true);if(prev!==cur){const l=$("tbLens");l.classList.remove("stretch");void l.offsetWidth;l.classList.add("stretch")}}
 }
+function replay(p){
+  V.anim=true;p.classList.remove("anim");void p.offsetWidth;p.classList.add("anim");
+  clearTimeout(replay.t);replay.t=setTimeout(()=>{p.classList.remove("anim");V.anim=false},1200);
+}
+function countUp(el,to,dur){
+  const t0=performance.now();const ease=x=>1-Math.pow(1-x,3);
+  (function f(t){const k=Math.min(1,(t-t0)/dur);el.textContent=fmt(to*ease(k));if(k<1)requestAnimationFrame(f)})(t0);
+}
+function doRefresh(){const t=V.tab;replay($("tab-"+t));render(t);toast("Aktualisiert")}
 function go(tab){
   V.tab=tab;if(tab!=="menu")V.menu=null;
   document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
   $("tab-"+tab).classList.add("active");
   $("fab").classList.toggle("show",tab==="products");
-  $("scroll").scrollTop=0;buildTabbar();render(tab);
+  $("scroll").scrollTop=0;buildTabbar();replay($("tab-"+tab));render(tab);
 }
 function render(tab){
   tab=tab||V.tab;
@@ -441,7 +520,7 @@ function lineChart(vals){
   const line=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ");
   const area=line+` L${pts[pts.length-1][0]} ${H} L${pts[0][0]} ${H} Z`;
   const last=pts[pts.length-1];
-  return `<svg class="chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#008060" stop-opacity=".22"/><stop offset="1" stop-color="#008060" stop-opacity="0"/></linearGradient></defs>
+  return `<svg class="chart${V.anim?" wipe":""}" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#008060" stop-opacity=".22"/><stop offset="1" stop-color="#008060" stop-opacity="0"/></linearGradient></defs>
   <line x1="0" y1="${H-1}" x2="${W}" y2="${H-1}" stroke="#ebebeb"/><path d="${area}" fill="url(#g)"/><path d="${line}" fill="none" stroke="#008060" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>`;
 }
 
@@ -495,7 +574,7 @@ function rHome(){
     <div class="card card-pad">
       <div class="sales-head"><span class="card-title">Gesamtverkäufe</span>
         <button class="range-btn" id="rangeBtn">${rl} ${I.caret}</button></div>
-      <div class="big-num">${fmt(total)}</div>
+      <div class="big-num" id="bigNum">${fmt(total)}</div>
       <div class="delta ${dl}">${dl==="up"?I.up:dl==="down"?I.down:""} ${dt} <span style="color:var(--t3);font-weight:500;margin-left:4px">ggü. Vorzeitraum</span></div>
       ${lineChart(series)}
       <div class="chart-x"><span>${labels[0]}</span><span>${labels[1]}</span></div>
@@ -511,6 +590,7 @@ function rHome(){
     <div class="sec-label">Top-Produkte</div>
     <div class="card">${top.length?top.map(t=>{const p=S.products.find(x=>x.name===t[0]);return `<div class="row" style="cursor:default"><div class="thumb">${p?p.emoji:"📦"}</div><div class="r-main"><div class="r-title">${esc(t[0])}</div><div class="r-sub">${t[1]} verkauft</div></div></div>`}).join(""):`<div class="empty" style="padding:26px"><p style="margin:0">Verkaufsdaten erscheinen hier.</p></div>`}</div>
   `;
+  const bn=$("bigNum");if(V.anim&&bn)countUp(bn,total,850);
   $("rangeBtn").addEventListener("click",()=>{
     openSheet("Zeitraum",[[1,"Heute"],[7,"Letzte 7 Tage"],[30,"Letzte 30 Tage"]].map(x=>`<div class="opt ${V.range===x[0]?"sel":""}" data-r="${x[0]}">${x[1]}<span class="rad"></span></div>`).join(""));
     $("sheetBody").querySelectorAll("[data-r]").forEach(b=>b.addEventListener("click",()=>{V.range=+b.dataset.r;closeSheet();rHome()}));
@@ -720,7 +800,10 @@ function notifyOrder(o){
   S.notifications=S.notifications.slice(0,100);save();
   if(S.admin.banner&&!document.hidden)showBanner(`${S.settings.shopName}: ${title}`,msg,o.id);
   if(document.hidden||!S.admin.banner)sysNotify(`${S.settings.shopName}: ${title}`,msg,o.id);
-  chime();render();
+  if(S.admin.ntfy)ntfySend(`${S.settings.shopName}: ${title}`,msg).then(ok=>{if(!ok)toast("Push konnte nicht gesendet werden")});
+  chime();
+  const oi=document.querySelector('.tb-item[data-tab="orders"]');if(oi){oi.classList.remove("ping");void oi.offsetWidth;oi.classList.add("ping")}
+  render();
 }
 function buildSimOrder(){
   const A=S.admin;
@@ -782,8 +865,16 @@ function subAdmin(el){
     <div class="toggle-row"><div><b>Verkaufston &amp; Vibration</b><span>Kassenklingel bei neuer Bestellung</span></div><div class="switch ${A.sound?"on":""}" data-t="sound"></div></div>
   </div>
 
+  <div class="card card-pad" id="pushCard">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><div><b style="font-size:14.5px">Echte Push-Mitteilungen aufs Handy</b><div class="r-sub" style="white-space:normal;margin-top:3px">Kommen auch bei gesperrtem Handy und geschlossener App an.</div></div><div class="switch ${A.ntfy?"on":""}" id="ntfyToggle"></div></div>
+    <ol class="hint" style="padding-left:18px;margin-top:10px"><li>Kostenlose App „ntfy“ installieren (App Store / Play Store).</li><li>Dort auf „+“ tippen und dieses Thema abonnieren:</li></ol>
+    <div class="field" style="margin:8px 0 10px"><input id="ntfyTopicIn" readonly value="${esc(ntfyTopic())}" style="font-family:ui-monospace,Menlo,monospace"></div>
+    <div class="row2"><button class="btn btn-sec btn-sm" id="ntfyCopy" style="flex:1">Kopieren</button><button class="btn btn-green btn-sm" id="ntfyTest" style="flex:1">Test-Push senden</button></div>
+    <p class="hint">Das Thema ist wie ein Passwort – wer es kennt, kann mitlesen. Die Nachrichten laufen über den kostenlosen Dienst ntfy.sh.</p>
+  </div>
+
   <div class="card card-pad" id="sysCard">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><div><b style="font-size:14.5px">Handy-Mitteilungen</b><div class="r-sub" style="white-space:normal;margin-top:3px" id="sysStat"></div></div><span class="badge" id="sysBadge"></span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><div><b style="font-size:14.5px">Browser-Mitteilungen</b><div class="r-sub" style="white-space:normal;margin-top:3px" id="sysStat"></div></div><span class="badge" id="sysBadge"></span></div>
     <div class="row2" style="margin-top:12px"><button class="btn btn-sec btn-sm" style="flex:1" id="sysAsk">Erlauben</button><button class="btn btn-sec btn-sm" style="flex:1" id="sysTest">Test senden</button></div>
     <p class="hint">Echte Mitteilungen erscheinen, wenn die App im Hintergrund ist. Auf dem iPhone: in Safari Teilen → „Zum Home-Bildschirm“, App von dort öffnen, dann „Erlauben“ tippen.</p>
   </div>
@@ -814,6 +905,9 @@ function subAdmin(el){
     if(notifState()==="default")askNotif(p=>{subAdmin(el);if(p==="granted")send();else toast("Nicht erlaubt")});else send();
   };
   const rr=()=>subAdmin(el);
+  $("ntfyToggle").onclick=()=>{A.ntfy=!A.ntfy;save();rr();toast(A.ntfy?"Push aufs Handy aktiv":"Push aus")};
+  $("ntfyCopy").onclick=()=>{const v=ntfyTopic();const done=()=>toast("Thema kopiert");try{navigator.clipboard.writeText(v).then(done,()=>{$("ntfyTopicIn").select();document.execCommand("copy");done()})}catch(e){$("ntfyTopicIn").select();document.execCommand("copy");done()}};
+  $("ntfyTest").onclick=()=>{toast("Sende…");ntfySend(S.settings.shopName+": Neue Bestellung #"+(S.orderSeq+1),fmt(129)+" von Lena M. · 1× Wireless Kopfhörer X2").then(ok=>toast(ok?"Test-Push gesendet":"Senden fehlgeschlagen – Internet prüfen"))};
   $("aMode").querySelectorAll("button").forEach(b=>b.onclick=()=>{if(b.disabled)return;A.mode=b.dataset.m;save();rr()});
   const ap=$("aProd");if(ap){A.productId=A.productId||ap.value;ap.onchange=()=>{A.productId=ap.value;save();rr()}}
   const cn=$("aCN");if(cn)cn.oninput=()=>{A.customName=cn.value;save()};
@@ -917,6 +1011,46 @@ function finishOB(){
   save();
   setTimeout(()=>{$("onboard").classList.remove("show");V.tab="home";V.menu=null;buildTabbar();go("home");toast("Dein Shop ist bereit 🎉")},700);
 }
+
+/* ---------- pull to refresh ---------- */
+(function(){
+  const sc=$("scroll"),pe=$("ptr"),sp=pe.querySelectorAll("line");
+  const TH=64;let y0=0,pull=0,track=false,pulling=false,busy=false,armed=false;
+  const setSp=p=>{const n=Math.round(Math.min(1,p)*12);sp.forEach((l,i)=>l.style.opacity=i<n?1:.18)};
+  const apply=px=>{sc.style.setProperty("--pull",px+"px");pe.style.opacity=Math.min(1,px/34)};
+  function start(y){if(busy||sc.scrollTop>0)return;y0=y;track=true;pulling=false;armed=false;pull=0}
+  function move(y,e){
+    if(!track)return;const dy=y-y0;
+    if(dy<=0&&!pulling)return;
+    if(sc.scrollTop>0&&!pulling){track=false;return}
+    if(e&&e.cancelable)e.preventDefault();
+    if(!pulling){pulling=true;sc.classList.remove("releasing");sc.classList.add("pulling")}
+    pull=Math.max(0,130*(1-Math.exp(-dy/230)));
+    apply(pull);setSp(pull/TH);
+    if(pull>=TH&&!armed){armed=true;try{navigator.vibrate&&navigator.vibrate(14)}catch(_){}}
+    if(pull<TH)armed=false;
+  }
+  function end(){
+    if(!track)return;track=false;if(!pulling)return;pulling=false;
+    sc.classList.add("releasing");
+    if(pull>=TH){
+      busy=true;pe.classList.add("spin");apply(58);
+      sp.forEach((l,i)=>l.style.opacity=.18+.82*(i/11));
+      setTimeout(()=>{
+        doRefresh();apply(0);
+        setTimeout(()=>{pe.classList.remove("spin");sc.classList.remove("pulling","releasing");busy=false;pull=0},520);
+      },1000);
+    }else{
+      apply(0);setTimeout(()=>{if(!busy)sc.classList.remove("pulling","releasing")},520);
+    }
+  }
+  sc.addEventListener("touchstart",e=>start(e.touches[0].clientY),{passive:true});
+  sc.addEventListener("touchmove",e=>move(e.touches[0].clientY,e),{passive:false});
+  sc.addEventListener("touchend",end);sc.addEventListener("touchcancel",end);
+  sc.addEventListener("mousedown",e=>start(e.clientY));
+  window.addEventListener("mousemove",e=>{if(track&&e.buttons)move(e.clientY,e)});
+  window.addEventListener("mouseup",end);
+})();
 
 /* ---------- init ---------- */
 buildTabbar();
